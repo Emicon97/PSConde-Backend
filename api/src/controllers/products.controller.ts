@@ -8,9 +8,29 @@ class ProductsController {
 
   public getProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const findAllProductsData: Product[] = await this.productService.findAllProduct();
+      const findAllProductsData: Array<Product | Number> = await this.productService.findAllProduct(req.body);
 
       res.status(200).json({ data: findAllProductsData, message: 'findAll' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getBrands = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findBrands: string[] = await this.productService.findBrands();
+
+      res.status(200).json({ data: findBrands, message: 'findBrands' });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getProductsByName = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const findProductsByNameData: Product[] = await this.productService.findProductsByName(req.body);
+
+      res.status(200).json({ data: findProductsByNameData, message: 'findByName' });
     } catch (error) {
       next(error);
     }
