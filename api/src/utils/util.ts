@@ -17,3 +17,12 @@ export const isEmpty = (value: string | number | object): boolean => {
     return false;
   }
 };
+
+export const diacriticSensitiveRegex = (string: string): string => {
+  return string
+    .replace(/a|á|à/gi, '[a,á,à,A,Á,À]')
+    .replace(/e|é|è/gi, '[e,é,è,E,É,È]')
+    .replace(/i|í|ì/gi, '[i,í,ì,I,Í,Ì]')
+    .replace(/o|ó|ò/gi, '[o,ó,ò,O,Ó,Ò]')
+    .replace(/u|ú|ü|ù/gi, '[u,ú,ü,ù,U,Ú,Ü,Ù]');
+};

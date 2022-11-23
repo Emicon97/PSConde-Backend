@@ -9,7 +9,7 @@ import userModel from '@models/users.model';
 import { isEmpty } from '@utils/util';
 
 class AuthService {
-  public async signup(userData: CreateUserDto): Promise<User> {
+  public async signup(userData: CreateUserDto): Promise<{ cookie: string; createUserData: User }> {
     if (isEmpty(userData)) throw new HttpException(400, "No se ingresaron los datos de usuario.");
 
     const findUser: User = await userModel.findOne({ email: userData.email });
@@ -17,8 +17,11 @@ class AuthService {
 
     const hashedPassword = await hash(userData.password, 10);
     const createUserData: User = await userModel.create({ ...userData, password: hashedPassword });
+    
+    const tokenData = this.createToken(createUserData);
+    const cookie = this.createCookie(tokenData);
 
-    return createUserData;
+    return { cookie, createUserData };
   }
 
   public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: User }> {

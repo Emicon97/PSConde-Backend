@@ -2,19 +2,46 @@ import { CreateProductDto } from './../dtos/products.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { Product } from '@/interfaces/products.interface';
 import ArticuloModel from '@/models/articulos.model';
-import { isEmpty } from '@utils/util';
+import { diacriticSensitiveRegex, isEmpty } from '@utils/util';
 import { Pagination } from '@/interfaces/pagination.interface';
 import { Cart } from '@/interfaces/cart.interface';
+import { Or } from '@/interfaces/or.interface';
 
 class ProductService {
-  public async findAllProduct({ limit, skip }: Pagination): Promise<Array<Product | Number>> {
-    const products: Array<Product | Number> = await ArticuloModel.find({ stock: { $gte: 1 } })
+  public async findAllProduct({ limit, skip, filters }: Pagination): Promise<Array<Product | number>> {
+    const search: string = diacriticSensitiveRegex(filters.search).trim().replace(' ', '|');
+    const category: string = filters.filters.category.join('|');
+    const filter: string = filters.filters.filter.join('|');
+    const brand: string = filters.filters.brand.join('|');
+
+    const allFilterStrings: Array<string | Or> = [search, category, filter, brand];
+    var allFilters: Or[] = [];
+
+    allFilterStrings.forEach((element: string): void => {
+      allFilters.push({
+        $or: [
+          { descrip: { $regex: element, $options: 'i' } },
+          { linea: { $regex: element, $options: 'i' } },
+          { tags: { $regex: element, $options: 'i' } },
+          { marca: { $regex: element, $options: 'i' } },
+        ],
+      });
+    });
+
+    const filtered: Array<Product | number> = await ArticuloModel.find({
+      stock: { $gte: 1 },
+      $and: allFilters,
+    })
       .limit(limit)
       .skip(skip);
-    const amount: Number = await ArticuloModel.count({ stock: { $gte: 1 } });
-    products.push(amount);
 
-    return products;
+    const amount: number = await ArticuloModel.count({
+      stock: { $gte: 1 },
+      $and: allFilters,
+    });
+    filtered.push(amount);
+
+    return filtered;
   }
 
   public async findProductsByName(products: Cart[]): Promise<Product[]> {
