@@ -5,7 +5,7 @@ COPY . ./app
 
 WORKDIR /app
 
-RUN npm install -D @swc/cli @swc/core
+RUN npm install
 
 EXPOSE 3001
 
