@@ -61,7 +61,6 @@ class ProductsController {
 
   public updateProduct = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-      console.log(req.user)
       const productId: string = req.params.id;
       const productData: CreateProductDto = req.body;
       const updateProductData: Product = await this.productService.updateProduct(productId, productData);

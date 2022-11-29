@@ -85,9 +85,9 @@ class ProductService {
   public async updateProduct(productId: string, productData: CreateProductDto): Promise<Product> {
     if (isEmpty(productData)) throw new HttpException(400, 'productData is empty');
 
-    const updateProductById: Product = await ArticuloModel.findByIdAndUpdate(productId, { productData });
+    const updateProductById: Product = await ArticuloModel.findByIdAndUpdate(productId, productData);
     if (!updateProductById) throw new HttpException(409, "Product doesn't exist");
-
+    
     return updateProductById;
   }
 
