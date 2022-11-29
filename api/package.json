@@ -2,12 +2,12 @@
   "name": "psconde-backend",
   "version": "0.0.0",
   "description": "TypeScript + Typegoose + MongoDB + Express API Server",
-  "author": "",
+  "author": "Emilio R. Conde Frers",
   "license": "ISC",
   "scripts": {
     "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "build": "swc src -d dist --source-maps --copy-files",
+    "build": "swc src -d ./dist --source-maps --copy-files",
     "build:tsc": "tsc && tsc-alias",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
@@ -73,5 +73,14 @@
     "tsc-alias": "^1.7.0",
     "tsconfig-paths": "^4.0.0",
     "typescript": "^4.7.4"
-  }
+  },
+  "main": "ecosystem.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Emicon97/PSConde-Backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Emicon97/PSConde-Backend/issues"
+  },
+  "homepage": "https://github.com/Emicon97/PSConde-Backend#readme"
 }
