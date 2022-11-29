@@ -18,7 +18,7 @@
       "compress": false,
       "mangle": false
     },
-    "baseUrl": "dist",
+    "baseUrl": "src",
     "paths": {
       "@/*": ["*"],
       "@config": ["config"],
